@@ -1,0 +1,77 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <link rel="apple-touch-icon" sizes="57x57" href="{% static "wp/favicon/apple-icon-57x57.png" %}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{% static "wp/favicon/apple-icon-60x60.png" %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{% static "wp/favicon/apple-icon-72x72.png" %}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{% static "wp/favicon/apple-icon-76x76.png" %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{% static "wp/favicon/apple-icon-114x114.png" %}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{% static "wp/favicon/apple-icon-120x120.png" %}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{% static "wp/favicon/apple-icon-144x144.png" %}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{% static "wp/favicon/apple-icon-152x152.png" %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static "wp/favicon/apple-icon-180x180.png" %}">
+        <link rel="icon" type="image/png" sizes="192x192"  href="{% static "wp/favicon/android-icon-192x192.png" %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static "wp/favicon/favicon-32x32.png" %}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{% static "wp/favicon/favicon-96x96.png" %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static "wp/favicon/favicon-16x16.png" %}">
+        <link rel="manifest" href="{% static "wp/favicon/manifest.json" %}">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="{% static "wp/favicon/ms-icon-144x144.png" %}">
+        <meta name="theme-color" content="#ffffff">
+		<title>{% block head_title %}{% endblock %}</title>
+        {% block extra_head %}
+        {% endblock %}
+		<!-- BEGIN META -->
+        {% include "include/meta.html" %}
+		<!-- END META -->
+
+		<!-- BEGIN STYLESHEETS -->
+        {% include "include/blank_css.html" %}
+		<!-- END STYLESHEETS -->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		{% include "include/blank_ie_js.html" %}
+		<![endif]-->
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+	</head>
+	<body class="menubar-hoverable header-fixed ">
+    {% block body %}
+        {% if messages %}
+                <!-- грузим после полной загрузки страницы -->
+                <script type="text/javascript">
+                    window.onload = function() {
+                        {% for message in messages %}
+                        toastr.{% if message.tags %}
+                                {{ message.tags }}
+                                {% else %}
+                                info
+                                {% endif %}
+                                ('{{ message }}');
+                        {% endfor %}
+                    }
+                </script>
+                {% endif %}
+		<!-- BEGIN LOGIN SECTION -->
+		<section class="section-account">
+			<div class="img-backdrop" style="background-image: url('{% static "wp/img/login_header.jpg" %}')"></div>
+			<div class="spacer"></div>
+			<div class="card contain-sm style-transparent">
+				<div class="card-body">
+                    {% block content %}
+                    {% endblock %}
+                </div><!--end .card-body -->
+            </div><!--end .card -->
+        </section>
+        <!-- END LOGIN SECTION -->
+
+        <!-- BEGIN JAVASCRIPT -->
+        {% include "include/blank_js.html" %}
+        <!-- END JAVASCRIPT -->
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+    </body>
+</html>

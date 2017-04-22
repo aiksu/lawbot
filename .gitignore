@@ -1,0 +1,4 @@
+/.idea/
+**/migrations/0*.py
+**/south_migrations/0*.py
+public

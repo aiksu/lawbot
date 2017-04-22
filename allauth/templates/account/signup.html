@@ -1,0 +1,150 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load wp_extras %}
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<h1>{% trans "Sign Up" %}</h1>
+
+<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+<body>
+<div class="btn-toolbar">
+    <ul class="nav nav-tabs tabs-center " data-toggle="tabs">
+        <li class="active"><a href="#signup_form">{% trans 'Регистрация заказчиков' %}</a></li>
+        <li><a href="#request_form">{% trans 'Регистрация исполнителей' %}</a></li>
+    </ul>
+</div>
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-error">
+                <h1>{{ error|escape }}</h1>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-error">
+            <h1>{{ error|escape }}</h1>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="tab-content">
+    <div class="tab-pane active" id="signup_form">
+        <form class="signup form floating-label form-validate" role="form" method="post"  name="Zakazchik" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            <div class="card tab-content" id="Zakaz">
+            <div class="card-body">
+                <div class="form-group">
+                    <input class="form-control" id="full_name" name="full_name" required data-rule-minlength="6">
+                    <label for="full_name">{% trans 'Full Name' %}</label>
+                    <p class="help-block">{% trans 'Ex:Ivan Ivanovich' %}</p>
+                </div>
+                <input id="type" name="type" value="0" hidden>
+                <input id="last_name" name="last_name"  value="" hidden>
+                <div class="form-group">
+                    <input type="email" class="form-control" id="id_email" name="email" required>
+                    <label for="id_email">{% trans 'Email' %}</label>
+                    <p class="help-block">{% trans 'Ex: mickle_jackson@zubmill.com' %}</p>
+                </div>
+                <textarea id ="promo" name="promo" hidden>0</textarea>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="id_password1" name="password1" data-rule-minlength="8"
+                           maxlength="16" required>
+                    <label for="id_password1">{% trans 'Password' %}</label>
+                    <p class="help-block">{% trans 'Minimum length 8 / Maximum length 16' %}</p>
+                </div>
+                <div class="form-group">
+                    <input type="tel" class="form-control" data-inputmask="'mask': '+9 (999) 999-9999'" id="phone" name="phone" required>
+                    <label for="phone">{% trans 'Phone' %}</label>
+                    <p class="help-block">{% trans 'Ex: +7-(123)-456-7890' %}</p>
+                </div>
+{#                <div class="g-recaptcha" data-sitekey="6LeoVBgTAAAAAAqrDct6fE-J2-wbrmcugldxRjz0"></div>#}
+                <br>
+
+                 <div class="form-group">
+                        <label>
+                            <span><a href="{% static "wp/agreements/for_clients/user_agreement.pdf" %}">{% trans 'By clicking Sign In you are accepting site terms and conditions' %}</a></span>
+                        </label>
+                </div>
+            </div>
+
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}
+                <div class="card-actionbar">
+                    <div class="card-actionbar-row">
+                        <button type="submit" class="btn btn-flat btn-primary ink-reaction">{% trans 'Sign Up' %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="tab-pane" id="request_form">
+        <form class="signup form floating-label form-validate" role="form"  method="post"  name="Ispolnitel"  action="{% url 'account_signup' %}">
+            {% csrf_token %}
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+            <div class="card tab-content" id="Ispoln">
+            <div class="card-body">
+                <div class="form-group">
+                    <input class="form-control" id="full_name" name="full_name" required data-rule-minlength="6">
+                    <label for="full_name">{% trans 'Full Name' %}</label>
+                    <p class="help-block">{% trans 'Ex:Vlad Vladovich' %}</p>
+                </div>
+                <textarea id ="promo" name="promo" hidden>0</textarea>
+                <input id="id_type" name="type" hidden value="1">
+                <div class="form-group">
+                    <input type="email" class="form-control" id="id_email" name="email" required>
+                    <label for="id_email">{% trans 'Email' %}</label>
+                    <p class="help-block">{% trans 'Ex: mickle_jackson@zubmill.com' %}</p>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="id_password1" name="password1" data-rule-minlength="8"
+                           maxlength="16" required>
+                    <label for="id_password1">{% trans 'Password' %}</label>
+                    <p class="help-block">{% trans 'Minimum length 8 / Maximum length 16' %}</p>
+                </div>
+                <div class="form-group">
+                    <input type="tel" class="form-control" data-inputmask="'mask': '+9 (999) 999-9999'" id="phone" name="phone" required>
+                    <label for="phone">{% trans 'Phone' %}</label>
+                    <p class="help-block">{% trans 'Ex: +7-(123)-456-7890' %}</p>
+                </div>
+{#                <div class="g-recaptcha" data-sitekey="6LftnRsTAAAAANx86W-CAiY1_vJ8EMYdbScB_HTE"></div>#}
+                <br>
+
+                <div class="form-group">
+                        <label>
+                            <span><a href="{% static "wp/agreements/for_clients/user_agreement.pdf" %}">{% trans 'By clicking Sign In you are accepting site terms and conditions' %}</a></span>
+                        </label>
+                </div>
+            </div>
+
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}
+                <div class="card-actionbar">
+                    <div class="card-actionbar-row">
+                        <button type="submit" class="btn btn-flat btn-primary ink-reaction">{% trans 'Sign Up' %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var url = location.href;
+        var name = "promo";
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp( regexS );
+        var results = regex.exec( url );
+        console.log(results[1]);
+        return results == null ? null : $("#promo").text(results[1])});
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,183 @@
+{% load i18n %}
+{% load staticfiles %}
+{% get_current_language as LANG %}
+{% load mentor_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TheFollowApp | Manage your professional net</title>
+    <link rel="stylesheet" href="{% static 'nsyte/css/uikit.css' %}">
+    {% block extra_css %}
+    {% endblock %}
+</head>
+<body>
+<!-- Navbar -->
+<nav class="uk-navbar-container" uk-navbar>
+
+    <div class="uk-navbar-left">
+
+        <ul class="uk-navbar-nav">
+            <li><a href="{% url 'project:projects_list' %}">{% trans 'Projects' %}</a></li>
+            <li class="uk-active"><a href="#new-project-modal" uk-toggle>{% trans 'Create project' %}</a></li>
+            <li class="uk-active"><a href="#offcanvas-contact" uk-toggle>{% trans 'Create contact' %}</a></li>
+        </ul>
+
+    </div>
+    <div class="uk-navbar-center">
+        <a class="uk-navbar-item uk-logo" href="#">TheFollowApp</a>
+    </div>
+    <div class="uk-navbar-right">
+
+        <ul class="uk-navbar-nav">
+            <li>
+                <a href="#">{% trans 'User' %}</a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li class="uk-nav-header">{% trans 'My Staff' %}</li>
+                        <li><a href="#">Active</a></li>
+                        <li></li>
+                        <li class="uk-nav-header">{% trans 'Settings' %}</li>
+                        <li><a href="#">Item</a></li>
+                        <li><a href="#">Item</a></li>
+                        <li class="uk-nav-divider"></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+
+</nav>
+<!-- End navbar -->
+{% block body %}
+
+{% endblock %}
+
+<!-- This is the modal -->
+<!-- This is the modal -->
+<div id="new-project-modal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">{% trans 'Create new project' %}</h2>
+        <form action="{% url 'project:project_create' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="uk-fieldset">
+                <div class="uk-margin">
+                    <input name="title" class="uk-input" type="text" placeholder="{% trans 'Title' %}">
+                </div>
+                <div class="uk-margin">
+                    <textarea name="desc" class="uk-textarea" rows="5"
+                              placeholder="{% trans 'Short description (no more than 200 symbols)' %}"></textarea>
+                </div>
+            </fieldset>
+            <p class="uk-text-right">
+                <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                <button class="uk-button uk-button-primary" type="submit">Save</button>
+            </p>
+        </form>
+    </div>
+</div>
+<!-- end modal -->
+{% block modal %}
+    <div class="uk-offcanvas-content">
+        <div id="offcanvas-contact" uk-offcanvas="flip: false; overlay: true">
+            <div class="uk-offcanvas-bar">
+                <button class="uk-offcanvas-close" type="button" uk-close></button>
+                <h3>{% trans 'Create new contact' %}</h3>
+                <form action="{% url 'mentor:mentor_create' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset class="uk-fieldset">
+                        <div class="uk-margin">
+                            <select name="type" class="uk-select">
+                                <option value="#">{% trans 'other...' %}</option>
+                                {% for type in project_id|filter_mentor_type %}
+                                    <option value="{{ type.id }}">{{ type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="uk-margin">
+                            <select name="project" class="uk-select">
+                                {% for project in user.id|filter_user_projects %}
+                                    <option value="{{ project.project_id }}">{{ project.project }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="uk-margin">
+                            <select name="intro_by" class="uk-select">
+                                <option value="#">{% trans 'other...' %}</option>
+                                {% for mentor in project_id|filter_project_mentors %}
+                                    <option value="{{ mentor.id }}">{{ mentor }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="uk-margin">
+                            <input name="name" class="uk-input" type="text" placeholder="{% trans 'Name' %}">
+                        </div>
+                        <div class="uk-margin">
+                            <input name="job_title" class="uk-input" type="text" placeholder="{% trans 'Job title' %}">
+                        </div>
+                        <div class="uk-margin">
+                            <input name="job_company" class="uk-input" type="text"
+                                   placeholder="{% trans 'Job company' %}">
+                        </div>
+                        <div class="uk-margin">
+                            <input name="job_address" class="uk-input" type="text"
+                                   placeholder="{% trans 'Job address' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: facebook"></span>
+                            <input name="facebook" type="text" class="uk-input" placeholder="{% trans 'Facebook' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: linkedin"></span>
+                            <input name="linkedin" type="text" class="uk-input" placeholder="{% trans 'Linkedin' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: bookmark"></span>
+                            <input name="skype" type="text" class="uk-input" placeholder="{% trans 'Skype' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: link"></span>
+                            <input name="url" type="text" class="uk-input" placeholder="{% trans 'Url' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: comment"></span>
+                            <input name="telegram" type="text" class="uk-input" placeholder="{% trans 'Telegram' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: twitter"></span>
+                            <input name="twitter" type="text" class="uk-input" placeholder="{% trans 'Twitter' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: phone"></span>
+                            <input name="phone" type="text" class="uk-input" placeholder="{% trans 'Phone' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                            <input name="email" type="text" class="uk-input" placeholder="{% trans 'Email' %}">
+                        </div>
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: hashtag"></span>
+                            <input name="fax" type="text" class="uk-input" placeholder="{% trans 'Fax' %}">
+                        </div>
+
+                    </fieldset>
+                    <p class="uk-text-right">
+                        <button class="uk-button uk-button-primary" type="submit">Save</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<script src="{% static 'nsyte/js/jquery-3.1.1.min.js' %}"></script>
+<script src="{% static 'nsyte/js/uikit.min.js' %}"></script>
+<script src="{% static 'nsyte/js/uikit-icons.min.js' %}"></script>
+
+{% block extra_js %}
+{% endblock %}
+</body>
+</html>

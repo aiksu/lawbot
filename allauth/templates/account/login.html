@@ -1,0 +1,55 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+        <div class="col-sm-6">
+            <br/>
+            <span class="text-lg text-bold text-primary">{% trans 'Sing In' %}
+            </span>
+            <br/><br/>
+            <form class="form floating-label" action="{% url 'account_login' %}" accept-charset="utf-8" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control" id="id_login" name="login">
+                    <label for="id_login">{% trans "Username" %}</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="id_password" name="password">
+                    <label for="id_password">{% trans "Password" %}</label>
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+                    <p class="help-block"><a href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a></p>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-xs-6 text-left">
+                        <div class="checkbox checkbox-inline checkbox-styled">
+                            <label>
+                                <input type="checkbox" id="id_remember" name="remember"><span>{% trans 'Remember me' %}</span>
+                            </label>
+                        </div>
+                    </div><!--end .col -->
+                    <div class="col-xs-6 text-right">
+                        <button class="btn btn-primary btn-raised" type="submit">{% trans "Sign In" %}</button>
+                    </div><!--end .col -->
+                </div><!--end .row -->
+            </form>
+        </div>
+{#        <div class="col-sm-5 col-sm-offset-1 text-center">#}
+{#            <br><br>#}
+{#                <h3 class="text-light">#}
+{#                    Еще не зарегистрированы?#}
+{#                </h3>#}
+{#                <a class="btn btn-block btn-raised btn-primary" href="{% url 'account_signup' %}">Зарегистрироваться</a>#}
+{#            <br><br>#}
+{#        </div><!--end .col -->#}
+    </div><!--end .row -->
+
+{% endblock %}
